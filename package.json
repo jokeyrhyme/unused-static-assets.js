@@ -1,0 +1,31 @@
+{
+  "name": "@jokeyrhyme/unused-static-assets",
+  "version": "1.0.0",
+  "description": "compare logs to local folder and identity unused assets",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jokeyrhyme/unused-static-assets.js.git"
+  },
+  "keywords": [
+    "aws",
+    "s3",
+    "cloudfront",
+    "assets",
+    "log",
+    "parse"
+  ],
+  "author": "Ron Waldon (https://github.com/jokeyrhyme)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/jokeyrhyme/unused-static-assets.js/issues"
+  },
+  "homepage": "https://github.com/jokeyrhyme/unused-static-assets.js#readme",
+  "devDependencies": {
+    "eslint": "^0.22.1",
+    "eslint-config-standard": "^3.2.0"
+  }
+}
