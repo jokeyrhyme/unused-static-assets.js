@@ -29,8 +29,12 @@
     "eslint-config-standard": "^3.2.0"
   },
   "dependencies": {
+    "async": "^1.2.1",
     "commander": "^2.8.1",
     "glob": "^5.0.10",
-    "graceful-fs": "^3.0.8"
+    "graceful-fs": "^3.0.8",
+    "lodash.difference": "^3.2.1",
+    "lodash.uniq": "^3.2.1",
+    "progress": "^1.1.8"
   }
 }

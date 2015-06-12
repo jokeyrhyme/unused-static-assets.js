@@ -3,6 +3,13 @@
 compare logs to local folder and identity unused assets
 
 
+## What is this?
+
+I just whipped this up to analyse AWS Cloudfront access logs and compare them
+to a local directory of assets. The idea was to establish which files had were
+no longer in use, so that I could remove them.
+
+
 ## Usage
 
 ```shell

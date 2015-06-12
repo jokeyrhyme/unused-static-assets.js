@@ -9,10 +9,12 @@ var path = require('path');
 
 // 3rd-party modules
 
+var diff = require('lodash.difference');
 var program = require('commander');
 
 // our modules
 
+var hitsFromLogs = require(path.join(__dirname, 'lib', 'hits-from-logs'));
 var listFiles = require(path.join(__dirname, 'lib', 'list-files'));
 
 // this module
@@ -41,5 +43,16 @@ if (!fs.existsSync(logsPath)) {
 }
 
 listFiles().then(function (files) {
-  console.log(files, files.length);
+  console.log('total assets', files.length);
+
+  return hitsFromLogs(logsPath).then(function (hits) {
+    var unused = diff(files, hits);
+    console.log('hits', hits);
+    console.log('hits count', hits.length);
+    console.log('unused', unused);
+    console.log('unused count', unused.length);
+  });
+}).then(null, function (err) {
+  console.error(err);
+  process.exit(1);
 });
