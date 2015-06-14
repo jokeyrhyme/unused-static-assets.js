@@ -11,7 +11,6 @@ var path = require('path');
 
 // 3rd-party modules
 
-var diff = require('lodash.difference');
 var program = require('commander');
 var Progress = require('progress');
 var uniq = require('lodash.uniq');
@@ -19,6 +18,7 @@ var uniq = require('lodash.uniq');
 // our modules
 
 var listFiles = require(path.join(__dirname, 'lib', 'list-files'));
+var unusedDirs = require(path.join(__dirname, 'lib', 'unused-dirs'));
 
 // this module
 
@@ -29,9 +29,9 @@ var MAX_WORKERS = Math.max(Math.floor(os.cpus().length * 0.75), 2);
 var logsPath;
 
 var currentWorker;
+var workers = [];
 
 // arrays of filenames
-var assets;
 var logs;
 
 // collected hits
@@ -43,12 +43,22 @@ var nextBatch = 0;
 var commands = {};
 
 function finalise () {
-  var unused;
   allHits = uniq(allHits);
-  unused = diff(assets, allHits);
-  console.log('unused', unused, unused.length);
-  console.log('hits', allHits, allHits.length);
-  process.exit(0);
+  console.log('hits', allHits.length);
+  unusedDirs(allHits)
+  .then(function () {
+    process.exit(0);
+  }, function (err) {
+    console.error(err);
+    process.exit(0);
+  });
+}
+
+function checkWorkers () {
+  console.log('forks remaining: ' + workers.length);
+  if (!workers.length) {
+    finalise();
+  }
 }
 
 function sendWork (worker) {
@@ -62,7 +72,9 @@ function sendWork (worker) {
     return;
   }
   worker.removeAllListeners('message');
-  finalise();
+  worker.kill();
+  workers.splice(workers.indexOf(worker), 1);
+  checkWorkers();
 }
 
 commands['result:hits-from-logs'] = function (hits, numLogs) {
@@ -93,24 +105,21 @@ if (!fs.existsSync(logsPath)) {
   process.exit(1);
 }
 
-Promise.all([
-  listFiles.glob(),
-  listFiles.flat(logsPath)
-]).then(function (results) {
-  assets = results[0];
-  logs = results[1];
+listFiles.flat(logsPath)
+.then(function (result) {
+  logs = result;
 
   progress = new Progress(' [:bar] :percent :etas', {
     total: logs.length
   });
 
-  console.log('total assets', assets.length);
   console.log('total logs', logs.length);
 
   console.log('forking ' + MAX_WORKERS + ' times...');
   currentWorker = 0;
   while (currentWorker < MAX_WORKERS) {
     (function (worker) {
+      workers.push(worker);
       worker.on('message', function (msg) {
         commands[msg.cmd].apply(worker, msg.args);
       });
