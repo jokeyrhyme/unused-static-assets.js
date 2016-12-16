@@ -25,17 +25,17 @@
   },
   "homepage": "https://github.com/jokeyrhyme/unused-static-assets.js#readme",
   "devDependencies": {
-    "eslint": "^0.22.1",
-    "eslint-config-standard": "^3.2.0"
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1"
   },
   "dependencies": {
-    "async": "^1.2.1",
+    "async": "^2.1.4",
     "commander": "^2.8.1",
-    "glob": "^5.0.10",
-    "graceful-fs": "^3.0.8",
+    "glob": "^7.1.1",
+    "graceful-fs": "^4.1.11",
     "is-path-inside": "^1.0.0",
-    "lodash.difference": "^3.2.1",
-    "lodash.uniq": "^3.2.1",
+    "lodash.difference": "^4.5.0",
+    "lodash.uniq": "^4.5.0",
     "progress": "^1.1.8"
   }
 }
